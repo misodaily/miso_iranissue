@@ -133,8 +133,9 @@ async function ArticleDetailContent({ id }: { id: number }) {
   );
 }
 
-export default function ArticleDetailPage({ params }: { params: { id: string } }) {
-  const id = parseInt(params.id);
+export default async function ArticleDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const id = parseInt(resolvedParams.id);
   if (isNaN(id)) notFound();
 
   return (
