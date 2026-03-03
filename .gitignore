@@ -1,0 +1,41 @@
+# Environment
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+.next/
+.turbo/
+npm-debug.log*
+
+# Database
+*.sql.bak
+postgres_data/
+
+# Docker
+.docker/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+celerybeat-schedule
+celerybeat.pid
