@@ -19,7 +19,6 @@ services:
     dockerfilePath: backend/Dockerfile
     plan: free
     region: singapore
-    preDeployCommand: alembic upgrade head
     envVars:
       - key: DATABASE_URL
         fromDatabase:
