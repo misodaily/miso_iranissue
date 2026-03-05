@@ -96,7 +96,7 @@ export default function CommentPanel() {
 
             <CommentComposer onSubmit={handleAddComment} />
 
-            <div className="flex-1 overflow-y-auto pr-1 pb-4">
+            <div className="flex-1 max-h-[520px] lg:max-h-none overflow-y-auto pr-1 pb-4">
                 <CommentList comments={sortedComments} onLike={handleToggleLike} />
             </div>
         </div>

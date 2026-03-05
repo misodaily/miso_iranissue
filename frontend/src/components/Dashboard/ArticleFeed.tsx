@@ -7,6 +7,9 @@ import type { Article } from "@/types";
 import ArticleCard from "./ArticleCard";
 import FilterPanel from "./FilterPanel";
 
+// Permanent base filter: only show analyzed, Iran-US relevant articles
+const BASE_FILTERS: ArticleFilters = { min_risk: 10 };
+
 export default function ArticleFeed() {
   const [filters, setFilters] = useState<ArticleFilters>({});
   const [articles, setArticles] = useState<Article[]>([]);
@@ -25,7 +28,7 @@ export default function ArticleFeed() {
     const fetchInitial = async () => {
       setIsInitialLoading(true);
       try {
-        const result = await api.articles.list({ ...filters, page: 1, page_size: 20 });
+        const result = await api.articles.list({ ...BASE_FILTERS, ...filters, page: 1, page_size: 20 });
         if (!active) return;
         setArticles(result.items);
         setTotal(result.total);
@@ -46,7 +49,7 @@ export default function ArticleFeed() {
     const interval = setInterval(async () => {
       setIsPolling(true);
       try {
-        const result = await api.articles.list({ ...filters, page: 1, page_size: 20 });
+        const result = await api.articles.list({ ...BASE_FILTERS, ...filters, page: 1, page_size: 20 });
         setArticles(prev => {
           // Find new articles (those with IDs not in prev)
           const newArticles = result.items.filter(item => !prev.some(p => p.id === item.id));
@@ -71,7 +74,7 @@ export default function ArticleFeed() {
     setLoadingMore(true);
     try {
       const nextPage = page + 1;
-      const result = await api.articles.list({ ...filters, page: nextPage, page_size: 20 });
+      const result = await api.articles.list({ ...BASE_FILTERS, ...filters, page: nextPage, page_size: 20 });
       setArticles(prev => {
         const newArticles = result.items.filter(item => !prev.some(p => p.id === item.id));
         return [...prev, ...newArticles];

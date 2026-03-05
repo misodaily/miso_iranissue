@@ -1,5 +1,10 @@
 import { formatInTimeZone } from "date-fns-tz";
 import { parseISO } from "date-fns";
+import { clsx, type ClassValue } from "clsx";
+
+export function cn(...inputs: ClassValue[]) {
+  return clsx(inputs);
+}
 
 export function toKST(dateStr: string | undefined | null): string {
   if (!dateStr) return "-";

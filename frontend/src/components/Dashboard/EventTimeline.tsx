@@ -6,9 +6,26 @@ import { toKST, getClassificationColor, getSentimentColor } from "@/lib/utils";
 
 const isMostlyEnglish = (text: string) => {
     if (!text) return false;
-    // Count alphabet characters
     const englishCount = (text.match(/[a-zA-Z]/g) || []).length;
-    return englishCount > text.length * 0.3; // If more than 30% of string is English characters, assume English title
+    return englishCount > text.length * 0.3;
+};
+
+// Keywords that confirm Iran-US war relevance
+const IRAN_US_KEYWORDS = [
+    'iran', 'iranian', 'tehran', 'khamenei', 'irgc', 'hormuz', 'persian',
+    '이란', '테헤란', '호르무즈', '혁명수비대', '하메네이', '파르스',
+    'trump', 'pentagon', 'us-iran', 'iran-us', 'biden',
+    '트럼프', '미국', '바이든',
+    'nuclear', 'sanction', 'missile', 'airstrike', 'strike',
+    '핵', '제재', '미사일', '공격', '전쟁', '군사', '폭격',
+    'oil', 'strait', 'hezbollah', 'hamas', 'proxy',
+    '석유', '원유', '해협', '헤즈볼라',
+    'israel', '이스라엘',
+];
+
+const isIranUsRelevant = (cluster: IssueCluster): boolean => {
+    const text = [cluster.title, ...(cluster.keywords || [])].join(' ').toLowerCase();
+    return IRAN_US_KEYWORDS.some(kw => text.includes(kw));
 };
 
 export default function EventTimeline() {
@@ -17,12 +34,14 @@ export default function EventTimeline() {
     const [openingId, setOpeningId] = useState<number | null>(null);
 
     useEffect(() => {
-        api.issues.list({ limit: 15 })
+        api.issues.list({ limit: 30, min_risk: 10 })
             .then(async (res) => {
                 // Sort by last_updated_at descending
-                const sorted = res.sort((a, b) =>
-                    new Date(b.last_updated_at || "").getTime() - new Date(a.last_updated_at || "").getTime()
-                );
+                const sorted = res
+                    .filter(isIranUsRelevant)
+                    .sort((a, b) =>
+                        new Date(b.last_updated_at || "").getTime() - new Date(a.last_updated_at || "").getTime()
+                    );
 
                 // Fetch details for each cluster to get the summary field
                 const detailedClusters = await Promise.all(
@@ -80,9 +99,9 @@ export default function EventTimeline() {
     if (clusters.length === 0) return null;
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col lg:h-full">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col h-full">
             <h2 className="text-base font-semibold text-gray-900 mb-4 shrink-0">주요 타임라인 (Key Events Timeline)</h2>
-            <div className="max-h-[450px] lg:max-h-none lg:h-[calc(100vh-250px)] overflow-y-auto pr-2">
+            <div className="flex-1 min-h-0 max-h-[450px] lg:max-h-none overflow-y-auto pr-2">
                 <div className="relative border-l-2 border-gray-100 ml-3 space-y-6 pb-2">
                     {clusters.map((cluster) => (
                         <div key={cluster.id} className="relative pl-5">
