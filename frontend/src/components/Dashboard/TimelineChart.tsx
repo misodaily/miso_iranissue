@@ -48,42 +48,45 @@ export default function TimelineChart() {
       </div>
 
       {loading ? (
-        <div className="h-64 bg-gray-50 rounded-lg animate-pulse" />
+        <div className="h-[320px] lg:h-[280px] bg-gray-50 rounded-lg animate-pulse" />
       ) : data.length === 0 ? (
-        <div className="h-64 flex items-center justify-center text-gray-400">
+        <div className="h-[320px] lg:h-[280px] flex items-center justify-center text-gray-400">
           <p>데이터가 없습니다 (기사 수집 후 표시됩니다)</p>
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height={280}>
-          <ComposedChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis
-              dataKey="hour"
-              tick={{ fontSize: 10 }}
-              tickLine={false}
-              interval="preserveStartEnd"
-            />
-            <YAxis yAxisId="left" tick={{ fontSize: 10 }} tickLine={false} />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              domain={[0, 100]}
-              tick={{ fontSize: 10 }}
-              tickLine={false}
-            />
-            <Tooltip
-              contentStyle={{ fontSize: 12, borderRadius: 8 }}
-              formatter={(value: number, name: string) => {
-                if (name === "기사 수") return [value, name];
-                return [`${value.toFixed(1)}`, name];
-              }}
-            />
-            <Legend wrapperStyle={{ fontSize: 12 }} />
-            <Bar yAxisId="left" dataKey="article_count" name="기사 수" fill="#3b82f6" radius={[2, 2, 0, 0]} opacity={0.8} />
-            <Line yAxisId="right" type="monotone" dataKey="avg_risk" name="평균 리스크" stroke="#ef4444" strokeWidth={2} dot={false} />
-            <Line yAxisId="right" type="monotone" dataKey="max_risk" name="최대 리스크" stroke="#7c3aed" strokeWidth={1.5} dot={false} strokeDasharray="4 2" />
-          </ComposedChart>
-        </ResponsiveContainer>
+        <div className="h-[320px] lg:h-[280px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={data} margin={{ top: 5, right: 16, left: -8, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis
+                dataKey="hour"
+                tick={{ fontSize: 9 }}
+                tickLine={false}
+                interval="preserveStartEnd"
+              />
+              <YAxis yAxisId="left" tick={{ fontSize: 10 }} tickLine={false} width={28} />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                domain={[0, 100]}
+                tick={{ fontSize: 10 }}
+                tickLine={false}
+                width={28}
+              />
+              <Tooltip
+                contentStyle={{ fontSize: 12, borderRadius: 8 }}
+                formatter={(value: number, name: string) => {
+                  if (name === "기사 수") return [value, name];
+                  return [`${value.toFixed(1)}`, name];
+                }}
+              />
+              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Bar yAxisId="left" dataKey="article_count" name="기사 수" fill="#3b82f6" radius={[2, 2, 0, 0]} opacity={0.8} />
+              <Line yAxisId="right" type="monotone" dataKey="avg_risk" name="평균 리스크" stroke="#ef4444" strokeWidth={2} dot={false} />
+              <Line yAxisId="right" type="monotone" dataKey="max_risk" name="최대 리스크" stroke="#7c3aed" strokeWidth={1.5} dot={false} strokeDasharray="4 2" />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
       )}
     </div>
   );

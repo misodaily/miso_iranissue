@@ -74,18 +74,23 @@ export default function DailyBrief() {
       </div>
 
       {/* Brief meta */}
-      <div className="p-4 bg-blue-50 border-b border-blue-100 flex items-center gap-4">
-        <div className="flex items-center gap-1.5 flex-1">
-          <BookOpen size={14} className="text-blue-600" />
-          <span className="text-xs text-blue-700 font-medium whitespace-nowrap">분석 기사 {brief.articles_analyzed}개</span>
-        </div>
-
-        <div className="flex items-center gap-2 text-[10px] sm:text-xs">
+      <div className="px-4 py-3 bg-blue-50 border-b border-blue-100">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <BookOpen size={13} className="text-blue-600" />
+            <span className="text-xs text-blue-700 font-semibold whitespace-nowrap">
+              분석 기사 {brief.articles_analyzed}개
+            </span>
+          </div>
           {updateTimes.last && (
-            <span className="text-gray-500 bg-white/50 px-2 py-1 rounded">최종 동기화: {updateTimes.last}</span>
+            <span className="text-[10px] text-gray-500 bg-white px-2 py-0.5 rounded-full whitespace-nowrap border border-gray-100">
+              최종 동기화: {updateTimes.last}
+            </span>
           )}
           {updateTimes.next && (
-            <span className="text-blue-600 font-medium bg-blue-100/50 px-2 py-1 rounded animate-pulse">다음 업데이트: {updateTimes.next}</span>
+            <span className="text-[10px] text-blue-600 font-medium bg-blue-100 px-2 py-0.5 rounded-full whitespace-nowrap animate-pulse">
+              다음 업데이트: {updateTimes.next}
+            </span>
           )}
         </div>
       </div>
